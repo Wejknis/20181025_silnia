@@ -1,44 +1,72 @@
 #include <stdio.h>
-#include <stdbool.h>
 
-long licz_silnie(int podstawa) {
-    if (podstawa == 0) {
-        return 1;
-    } else {
-        long licznik;
-        long silnia = 1;
+#define TEST
 
-        for (licznik = 1; licznik <= podstawa; ++licznik) {
-            silnia *= licznik;
-        }
-        return silnia;
+unsigned long licz_silnie(int podstawa) {
+    unsigned long licznik;
+    unsigned long silnia = 1;
+
+    for (licznik = 2; licznik <= podstawa; ++licznik) {
+        silnia *= licznik;
     }
-}
-
-bool test_licz_silnie() {
-    if  (licz_silnie(0) == 1) {
-        printf("test_licz_silnie() działa:");
-        return true;
-    } else {
-        printf("test_licz_silnie nie działa!");
-        return false;
-    }
+    return silnia;
 }
 
 
+#ifdef TEST
 
-int main () {
-    long wynik;
-    long podstawa;
+void nd(int licznik) { printf("Test nr %i nie działa\n", licznik); }
 
-    printf("Podaj podstawę silni w przedziale od 0 do 15: \n");
+void test_licz_silnie_0(int licznik) {
+    if (licz_silnie(0) != 1) nd(licznik);
+}
+
+void test_licz_silnie_1(int licznik) {
+    if (licz_silnie(1) != 1) nd(licznik);
+}
+
+void test_licz_silnie_2(int licznik) {
+    if (licz_silnie(2) != 2) nd(licznik);
+}
+
+void test_licz_silnie_3(int licznik) {
+    if (licz_silnie(5) != 120) nd(licznik);
+}
+
+void run_test_pool() {
+    int licznik = 0;
+
+    test_licz_silnie_0(++licznik);
+    test_licz_silnie_1(++licznik);
+    test_licz_silnie_2(++licznik);
+    test_licz_silnie_3(++licznik);
+}
+
+#endif
+
+
+int main() {
+
+#ifndef TEST
+
+    unsigned long wynik;
+    unsigned long podstawa;
+
+    printf("Podaj podstawe silni w przedziale od 0 do 15: \n");
     scanf("%ld", &podstawa);
 
-    if (podstawa > 0 && podstawa <= 15) {
+    if (podstawa >= 0 && podstawa <= 15) {
         wynik = licz_silnie(podstawa);
-        printf("silnia: %ld", wynik);
+        printf("silnia(%ld) = %ld", podstawa, wynik);
     } else {
-        printf("podałeś wartość spoza zakresu!");
+        printf("Podałeś liczbę spoza zakresu!\n");
     }
+
+#else
+
+    run_test_pool();
+
+#endif
+
     return 0;
 }
